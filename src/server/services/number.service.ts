@@ -31,6 +31,15 @@ export async function generateNumber(type: NumberType): Promise<string> {
       },
     });
     count = result;
+  } else if (type === 'transfer') {
+    const result = await db.inventoryTransfer.count({
+      where: {
+        transferNumber: {
+          startsWith: `${prefix}-${dateStr}-`,
+        },
+      },
+    });
+    count = result;
   }
   // Add other types as needed
 

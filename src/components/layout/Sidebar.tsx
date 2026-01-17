@@ -19,6 +19,7 @@ import {
   Settings,
   ChevronLeft,
   LayoutDashboard,
+  ArrowRightLeft,
 } from 'lucide-react';
 
 interface SidebarProps {
@@ -38,6 +39,7 @@ const navigation = [
   { name: 'Sales Orders', href: '/sales-orders', icon: FileText },
   { type: 'separator', label: 'INVENTORY' },
   { name: 'Inventory', href: '/inventory', icon: Boxes },
+  { name: 'Transfers', href: '/transfers', icon: ArrowRightLeft },
   { name: 'Batches', href: '/batches', icon: Layers },
   { type: 'separator', label: 'FINANCE' },
   { name: 'Accounting', href: '/accounting', icon: Calculator },
