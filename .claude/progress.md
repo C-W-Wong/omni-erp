@@ -2,10 +2,11 @@
 
 ## 當前狀態
 
-- **目前階段**: Phase 2 - 基礎資料模型
-- **下一個任務**: 2.2 客戶管理
+- **目前階段**: Phase 3 - Landed Cost 模組
+- **下一個任務**: 3.1 成本項目類型管理
 - **最後更新**: 2026-01-17
 - **Phase 1 完成**: ✓
+- **Phase 2 完成**: ✓
 
 ---
 
@@ -21,6 +22,9 @@
 | 2026-01-17 | 1 | 1.4 UI 基礎設置 | shadcn/ui, Dashboard layout, Sidebar, Header, Dark mode |
 | 2026-01-17 | 1 | 1.5 認證系統 | NextAuth.js v5, Login page, Middleware, useAuth hook |
 | 2026-01-17 | 2 | 2.1 產品管理 | Product/Category models, tRPC router, DataTable, ProductForm |
+| 2026-01-17 | 3 | 2.2 客戶管理 | Customer model, payment terms, credit limits |
+| 2026-01-17 | 3 | 2.3 供應商管理 | Supplier model, lead times, currency settings |
+| 2026-01-17 | 3 | 2.4 倉庫管理 | Warehouse model, default warehouse logic |
 
 ---
 
@@ -34,6 +38,9 @@
 | 1.4 | UI 基礎設置 | 2026-01-17 | Industrial design theme |
 | 1.5 | 認證系統 | 2026-01-17 | NextAuth.js v5, JWT strategy, 5 roles |
 | 2.1 | 產品管理 | 2026-01-17 | Product/Category CRUD, DataTable, CategoryManager |
+| 2.2 | 客戶管理 | 2026-01-17 | Customer CRUD, payment terms, credit limits |
+| 2.3 | 供應商管理 | 2026-01-17 | Supplier CRUD, lead times, currency settings |
+| 2.4 | 倉庫管理 | 2026-01-17 | Warehouse CRUD, default warehouse logic |
 
 ---
 
