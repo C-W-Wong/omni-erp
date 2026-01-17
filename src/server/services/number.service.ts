@@ -58,6 +58,15 @@ export async function generateNumber(type: NumberType): Promise<string> {
       },
     });
     count = result;
+  } else if (type === 'journal') {
+    const result = await db.journalEntry.count({
+      where: {
+        entryNumber: {
+          startsWith: `${prefix}-${dateStr}-`,
+        },
+      },
+    });
+    count = result;
   }
 
   // Generate next number (padded to 4 digits)

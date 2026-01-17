@@ -9,6 +9,7 @@ import { inventoryRouter } from './routers/inventory';
 import { transferRouter } from './routers/transfer';
 import { purchaseOrderRouter } from './routers/purchaseOrder';
 import { salesOrderRouter } from './routers/salesOrder';
+import { accountingRouter } from './routers/accounting';
 
 export const appRouter = createTRPCRouter({
   health: publicProcedure.query(() => {
@@ -24,8 +25,8 @@ export const appRouter = createTRPCRouter({
   transfer: transferRouter,
   purchaseOrder: purchaseOrderRouter,
   salesOrder: salesOrderRouter,
+  accounting: accountingRouter,
   // Add routers here as they are created:
-  // accounting: accountingRouter,
   // report: reportRouter,
 });
 

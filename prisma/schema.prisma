@@ -39,6 +39,8 @@ model User {
   confirmedPOs        PurchaseOrder[]     @relation("POConfirmer")
   createdSOs          SalesOrder[]        @relation("SOCreator")
   confirmedSOs        SalesOrder[]        @relation("SOConfirmer")
+  createdJEs          JournalEntry[]      @relation("JECreator")
+  postedJEs           JournalEntry[]      @relation("JEPoster")
 
   @@map("users")
 }
@@ -110,7 +112,8 @@ model Customer {
   createdAt       DateTime  @default(now())
   updatedAt       DateTime  @updatedAt
 
-  salesOrders     SalesOrder[]
+  salesOrders         SalesOrder[]
+  accountReceivables  AccountReceivable[]
 
   @@index([code])
   @@index([name])
@@ -143,6 +146,7 @@ model Supplier {
   updatedAt       DateTime  @updatedAt
   batches         Batch[]
   purchaseOrders  PurchaseOrder[]
+  accountPayables AccountPayable[]
 
   @@index([code])
   @@index([name])
@@ -434,6 +438,7 @@ model PurchaseOrder {
 
   items             PurchaseOrderItem[]
   batches           Batch[]                                 // Batches created from receiving
+  accountPayables   AccountPayable[]
 
   createdAt         DateTime            @default(now())
   updatedAt         DateTime            @updatedAt
@@ -515,7 +520,8 @@ model SalesOrder {
   confirmedById     String?
   confirmedBy       User?             @relation("SOConfirmer", fields: [confirmedById], references: [id])
 
-  items             SalesOrderItem[]
+  items               SalesOrderItem[]
+  accountReceivables  AccountReceivable[]
 
   createdAt         DateTime          @default(now())
   updatedAt         DateTime          @updatedAt
@@ -575,4 +581,177 @@ model SalesOrderAllocation {
   @@index([salesOrderItemId])
   @@index([batchId])
   @@map("sales_order_allocations")
+}
+
+// ============================================
+// 會計模組 (Accounting Module)
+// ============================================
+
+enum NormalBalance {
+  DEBIT
+  CREDIT
+}
+
+// Account Category - for classifying accounts
+model AccountCategory {
+  id            String        @id @default(cuid())
+  code          String        @unique               // 1=Assets, 2=Liabilities, 3=Equity, 4=Revenue, 5=Expenses
+  name          String
+  normalBalance NormalBalance
+  displayOrder  Int           @default(0)
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  accounts      ChartOfAccount[]
+
+  @@index([code])
+  @@map("account_categories")
+}
+
+// Chart of Accounts - hierarchical account structure
+model ChartOfAccount {
+  id          String            @id @default(cuid())
+  accountCode String            @unique               // e.g., 1101, 2110, 4110
+  name        String
+  categoryId  String
+  category    AccountCategory   @relation(fields: [categoryId], references: [id])
+  parentId    String?
+  parent      ChartOfAccount?   @relation("AccountHierarchy", fields: [parentId], references: [id])
+  children    ChartOfAccount[]  @relation("AccountHierarchy")
+  level       Int               @default(1)           // 1=Top level, 2=Sub, 3=Detail
+  isDetail    Boolean           @default(true)        // Can post entries to this account
+  isActive    Boolean           @default(true)
+  description String?
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+
+  journalLines JournalEntryLine[]
+
+  @@index([accountCode])
+  @@index([categoryId])
+  @@index([parentId])
+  @@map("chart_of_accounts")
+}
+
+enum JournalStatus {
+  DRAFT
+  POSTED
+  VOIDED
+}
+
+// Journal Entry - double-entry accounting
+model JournalEntry {
+  id            String        @id @default(cuid())
+  entryNumber   String        @unique               // JE-YYYYMMDD-XXXX
+  entryDate     DateTime
+  referenceType String                              // SalesOrder, PurchaseOrder, Manual, etc.
+  referenceId   String?                             // ID of the source document
+  description   String?
+  status        JournalStatus @default(DRAFT)
+  totalDebit    Decimal       @default(0) @db.Decimal(15, 2)
+  totalCredit   Decimal       @default(0) @db.Decimal(15, 2)
+
+  createdById   String?
+  createdBy     User?         @relation("JECreator", fields: [createdById], references: [id])
+  postedAt      DateTime?
+  postedById    String?
+  postedBy      User?         @relation("JEPoster", fields: [postedById], references: [id])
+
+  lines         JournalEntryLine[]
+
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  @@index([entryNumber])
+  @@index([entryDate])
+  @@index([referenceType, referenceId])
+  @@index([status])
+  @@map("journal_entries")
+}
+
+// Journal Entry Line - individual debit/credit line
+model JournalEntryLine {
+  id             String         @id @default(cuid())
+  journalEntryId String
+  journalEntry   JournalEntry   @relation(fields: [journalEntryId], references: [id], onDelete: Cascade)
+  accountId      String
+  account        ChartOfAccount @relation(fields: [accountId], references: [id])
+  description    String?
+  debitAmount    Decimal        @default(0) @db.Decimal(15, 2)
+  creditAmount   Decimal        @default(0) @db.Decimal(15, 2)
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+
+  @@index([journalEntryId])
+  @@index([accountId])
+  @@map("journal_entry_lines")
+}
+
+// ============================================
+// 應收/應付帳款 (Accounts Receivable/Payable)
+// ============================================
+
+enum ARStatus {
+  PENDING
+  PARTIAL
+  PAID
+  OVERDUE
+  WRITTEN_OFF
+}
+
+// Account Receivable - customer invoices
+model AccountReceivable {
+  id            String      @id @default(cuid())
+  customerId    String
+  customer      Customer    @relation(fields: [customerId], references: [id])
+  salesOrderId  String
+  salesOrder    SalesOrder  @relation(fields: [salesOrderId], references: [id])
+  invoiceNumber String?
+  invoiceDate   DateTime
+  dueDate       DateTime
+  amount        Decimal     @db.Decimal(15, 2)
+  paidAmount    Decimal     @default(0) @db.Decimal(15, 2)
+  balance       Decimal     @db.Decimal(15, 2)
+  status        ARStatus    @default(PENDING)
+  notes         String?
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+
+  @@index([customerId])
+  @@index([salesOrderId])
+  @@index([status])
+  @@index([dueDate])
+  @@map("account_receivables")
+}
+
+enum APStatus {
+  PENDING
+  PARTIAL
+  PAID
+  OVERDUE
+}
+
+// Account Payable - supplier invoices
+model AccountPayable {
+  id              String        @id @default(cuid())
+  supplierId      String
+  supplier        Supplier      @relation(fields: [supplierId], references: [id])
+  purchaseOrderId String
+  purchaseOrder   PurchaseOrder @relation(fields: [purchaseOrderId], references: [id])
+  invoiceNumber   String?
+  invoiceDate     DateTime
+  dueDate         DateTime
+  amount          Decimal       @db.Decimal(15, 2)
+  paidAmount      Decimal       @default(0) @db.Decimal(15, 2)
+  balance         Decimal       @db.Decimal(15, 2)
+  status          APStatus      @default(PENDING)
+  notes           String?
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  @@index([supplierId])
+  @@index([purchaseOrderId])
+  @@index([status])
+  @@index([dueDate])
+  @@map("account_payables")
 }
