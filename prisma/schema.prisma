@@ -72,3 +72,85 @@ model Product {
   @@index([sku])
   @@map("products")
 }
+
+// ============================================
+// Customer Model
+// ============================================
+
+model Customer {
+  id              String    @id @default(cuid())
+  code            String    @unique                    // Customer code (e.g., CUST-001)
+  name            String
+  contactPerson   String?
+  email           String?
+  phone           String?
+  fax             String?
+  address         String?
+  city            String?
+  country         String?
+  postalCode      String?
+  taxId           String?                              // Tax identification number
+  paymentTerms    Int       @default(30)               // Payment terms in days
+  creditLimit     Decimal   @default(0) @db.Decimal(15, 2)
+  notes           String?
+  isActive        Boolean   @default(true)
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  @@index([code])
+  @@index([name])
+  @@map("customers")
+}
+
+// ============================================
+// Supplier Model
+// ============================================
+
+model Supplier {
+  id              String    @id @default(cuid())
+  code            String    @unique                    // Supplier code (e.g., SUP-001)
+  name            String
+  contactPerson   String?
+  email           String?
+  phone           String?
+  fax             String?
+  address         String?
+  city            String?
+  country         String?
+  postalCode      String?
+  taxId           String?
+  paymentTerms    Int       @default(30)               // Payment terms in days
+  currency        String    @default("USD")            // Default trading currency
+  leadTimeDays    Int       @default(14)               // Average lead time in days
+  notes           String?
+  isActive        Boolean   @default(true)
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  @@index([code])
+  @@index([name])
+  @@map("suppliers")
+}
+
+// ============================================
+// Warehouse Model
+// ============================================
+
+model Warehouse {
+  id          String    @id @default(cuid())
+  code        String    @unique                        // Warehouse code (e.g., WH-MAIN)
+  name        String
+  address     String?
+  city        String?
+  country     String?
+  postalCode  String?
+  phone       String?
+  manager     String?                                  // Warehouse manager name
+  isDefault   Boolean   @default(false)                // Default warehouse for operations
+  isActive    Boolean   @default(true)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@index([code])
+  @@map("warehouses")
+}
