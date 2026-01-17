@@ -22,6 +22,7 @@ import {
 import { DataTable } from '@/components/tables/DataTable';
 import { createColumns, type ProductWithCategory } from './columns';
 import { ProductForm } from './ProductForm';
+import { CategoryManager } from './CategoryManager';
 import { trpc } from '@/lib/trpc';
 import { toast } from 'sonner';
 import {
@@ -135,10 +136,13 @@ export default function ProductsPage() {
               Manage your product catalog, categories, and pricing information.
             </p>
           </div>
-          <Button onClick={handleAddNew} className="gap-2">
-            <Plus className="h-4 w-4" />
-            Add Product
-          </Button>
+          <div className="flex items-center gap-2">
+            <CategoryManager />
+            <Button onClick={handleAddNew} className="gap-2">
+              <Plus className="h-4 w-4" />
+              Add Product
+            </Button>
+          </div>
         </div>
 
         {/* Stats Grid */}

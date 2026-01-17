@@ -103,7 +103,7 @@
           "id": "2.1",
           "name": "產品管理",
           "description": "產品和產品分類的完整 CRUD",
-          "status": "in_progress",
+          "status": "completed",
           "priority": "high",
           "tasks": [
             "建立 Product 和 ProductCategory Prisma 模型",
