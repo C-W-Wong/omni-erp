@@ -3,6 +3,8 @@ import { productRouter } from './routers/product';
 import { customerRouter } from './routers/customer';
 import { supplierRouter } from './routers/supplier';
 import { warehouseRouter } from './routers/warehouse';
+import { costItemTypeRouter } from './routers/costItemType';
+import { batchRouter } from './routers/batch';
 
 export const appRouter = createTRPCRouter({
   health: publicProcedure.query(() => {
@@ -12,13 +14,12 @@ export const appRouter = createTRPCRouter({
   customer: customerRouter,
   supplier: supplierRouter,
   warehouse: warehouseRouter,
+  costItemType: costItemTypeRouter,
+  batch: batchRouter,
   // Add routers here as they are created:
-  // supplier: supplierRouter,
-  // warehouse: warehouseRouter,
   // purchaseOrder: purchaseOrderRouter,
   // salesOrder: salesOrderRouter,
   // inventory: inventoryRouter,
-  // batch: batchRouter,
   // accounting: accountingRouter,
   // report: reportRouter,
 });

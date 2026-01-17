@@ -2,11 +2,12 @@
 
 ## 當前狀態
 
-- **目前階段**: Phase 3 - Landed Cost 模組
-- **下一個任務**: 3.1 成本項目類型管理
+- **目前階段**: Phase 4 - 庫存管理
+- **下一個任務**: 4.1 庫存資料結構
 - **最後更新**: 2026-01-17
 - **Phase 1 完成**: ✓
 - **Phase 2 完成**: ✓
+- **Phase 3 完成**: ✓
 
 ---
 
@@ -25,6 +26,8 @@
 | 2026-01-17 | 3 | 2.2 客戶管理 | Customer model, payment terms, credit limits |
 | 2026-01-17 | 3 | 2.3 供應商管理 | Supplier model, lead times, currency settings |
 | 2026-01-17 | 3 | 2.4 倉庫管理 | Warehouse model, default warehouse logic |
+| 2026-01-17 | 4 | 3.1 成本項目類型管理 | CostItemType model, seed defaults, CRUD |
+| 2026-01-17 | 4 | 3.2 批次管理 | Batch model, LandedCostItem, cost calculation, confirmation |
 
 ---
 
@@ -41,6 +44,8 @@
 | 2.2 | 客戶管理 | 2026-01-17 | Customer CRUD, payment terms, credit limits |
 | 2.3 | 供應商管理 | 2026-01-17 | Supplier CRUD, lead times, currency settings |
 | 2.4 | 倉庫管理 | 2026-01-17 | Warehouse CRUD, default warehouse logic |
+| 3.1 | 成本項目類型管理 | 2026-01-17 | CostItemType CRUD, seed defaults, system protection |
+| 3.2 | 批次管理 | 2026-01-17 | Batch CRUD, Landed Cost items, auto-calculation, confirmation |
 
 ---
 

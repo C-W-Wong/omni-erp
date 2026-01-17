@@ -182,6 +182,21 @@ export const productRouter = router({
     };
   }),
 
+  // List active products for dropdowns
+  listActive: protectedProcedure.query(async ({ ctx }) => {
+    return ctx.db.product.findMany({
+      where: { isActive: true },
+      select: {
+        id: true,
+        sku: true,
+        name: true,
+        unit: true,
+        defaultPrice: true,
+      },
+      orderBy: { name: 'asc' },
+    });
+  }),
+
   getById: protectedProcedure.input(z.string()).query(async ({ ctx, input }) => {
     const product = await ctx.db.product.findUnique({
       where: { id: input },

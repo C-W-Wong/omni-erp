@@ -23,14 +23,15 @@ enum Role {
 }
 
 model User {
-  id            String    @id @default(cuid())
-  email         String    @unique
-  name          String?
-  password      String
-  role          Role      @default(SALES)
-  isActive      Boolean   @default(true)
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  id              String    @id @default(cuid())
+  email           String    @unique
+  name            String?
+  password        String
+  role            Role      @default(SALES)
+  isActive        Boolean   @default(true)
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  confirmedBatches Batch[]
 
   @@map("users")
 }
@@ -67,6 +68,7 @@ model Product {
   isActive        Boolean         @default(true)
   createdAt       DateTime        @default(now())
   updatedAt       DateTime        @updatedAt
+  batches         Batch[]
 
   @@index([categoryId])
   @@index([sku])
@@ -126,6 +128,7 @@ model Supplier {
   isActive        Boolean   @default(true)
   createdAt       DateTime  @default(now())
   updatedAt       DateTime  @updatedAt
+  batches         Batch[]
 
   @@index([code])
   @@index([name])
@@ -150,7 +153,102 @@ model Warehouse {
   isActive    Boolean   @default(true)
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
+  batches     Batch[]
 
   @@index([code])
   @@map("warehouses")
+}
+
+// ============================================
+// Landed Cost Models
+// ============================================
+
+// Cost item types (Freight, Customs Duty, Insurance, etc.)
+model CostItemType {
+  id              String    @id @default(cuid())
+  code            String    @unique                        // Type code (e.g., FREIGHT, DUTY)
+  name            String                                   // Display name
+  description     String?
+  isSystem        Boolean   @default(false)                // System types cannot be deleted
+  isActive        Boolean   @default(true)
+  sortOrder       Int       @default(0)                    // For display ordering
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  landedCostItems LandedCostItem[]
+
+  @@index([code])
+  @@map("cost_item_types")
+}
+
+// Batch status enum
+enum BatchStatus {
+  DRAFT              // Initial state, costs can be edited
+  CONFIRMED          // Costs confirmed and locked
+  CANCELLED          // Batch cancelled
+}
+
+// Batch - represents a shipment/lot of products with landed cost tracking
+model Batch {
+  id                  String          @id @default(cuid())
+  batchNumber         String          @unique               // Auto-generated: BTH-YYYYMMDD-XXXX
+  productId           String
+  product             Product         @relation(fields: [productId], references: [id])
+  supplierId          String?
+  supplier            Supplier?       @relation(fields: [supplierId], references: [id])
+  warehouseId         String
+  warehouse           Warehouse       @relation(fields: [warehouseId], references: [id])
+
+  // Quantity and unit cost from purchase
+  quantity            Decimal         @db.Decimal(15, 4)    // Quantity in batch
+  unitPurchaseCost    Decimal         @db.Decimal(15, 4)    // Cost per unit from supplier
+  totalPurchaseCost   Decimal         @db.Decimal(15, 2)    // quantity × unitPurchaseCost
+  currency            String          @default("USD")
+
+  // Landed costs (calculated from LandedCostItems)
+  totalLandedCost     Decimal         @default(0) @db.Decimal(15, 2)  // Sum of all landed cost items
+  totalCost           Decimal         @default(0) @db.Decimal(15, 2)  // totalPurchaseCost + totalLandedCost
+  costPerUnit         Decimal         @default(0) @db.Decimal(15, 4)  // totalCost ÷ quantity
+
+  // Status and dates
+  status              BatchStatus     @default(DRAFT)
+  receivedDate        DateTime        @default(now())        // When batch was received
+  confirmedAt         DateTime?                              // When costs were confirmed
+  confirmedById       String?
+  confirmedBy         User?           @relation(fields: [confirmedById], references: [id])
+
+  notes               String?
+  createdAt           DateTime        @default(now())
+  updatedAt           DateTime        @updatedAt
+
+  // Related landed cost items
+  landedCostItems     LandedCostItem[]
+
+  @@index([batchNumber])
+  @@index([productId])
+  @@index([supplierId])
+  @@index([warehouseId])
+  @@index([status])
+  @@index([receivedDate])
+  @@map("batches")
+}
+
+// Landed cost item - individual cost component for a batch
+model LandedCostItem {
+  id              String        @id @default(cuid())
+  batchId         String
+  batch           Batch         @relation(fields: [batchId], references: [id], onDelete: Cascade)
+  costTypeId      String
+  costType        CostItemType  @relation(fields: [costTypeId], references: [id])
+  amount          Decimal       @db.Decimal(15, 2)   // Cost amount
+  currency        String        @default("USD")
+  exchangeRate    Decimal       @default(1) @db.Decimal(10, 6)  // Rate to batch currency
+  amountInBatchCurrency Decimal @db.Decimal(15, 2)   // amount × exchangeRate
+  description     String?                            // Optional notes for this cost
+  referenceNumber String?                            // Invoice/receipt number
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  @@index([batchId])
+  @@index([costTypeId])
+  @@map("landed_cost_items")
 }

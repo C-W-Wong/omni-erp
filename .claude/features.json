@@ -165,13 +165,13 @@
     {
       "id": 3,
       "name": "Landed Cost 模組",
-      "status": "pending",
+      "status": "completed",
       "features": [
         {
           "id": "3.1",
           "name": "成本項目類型管理",
           "description": "可配置的成本項目類型（運費、關稅、報關費等）",
-          "status": "pending",
+          "status": "completed",
           "priority": "high",
           "tasks": [
             "建立 CostItemType Prisma 模型",
@@ -185,7 +185,7 @@
           "id": "3.2",
           "name": "批次管理",
           "description": "批次建立和 Landed Cost 輸入，自動計算單位成本",
-          "status": "pending",
+          "status": "completed",
           "priority": "critical",
           "tasks": [
             "建立 Batch Prisma 模型",
