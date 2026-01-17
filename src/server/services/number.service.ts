@@ -49,8 +49,16 @@ export async function generateNumber(type: NumberType): Promise<string> {
       },
     });
     count = result;
+  } else if (type === 'sales') {
+    const result = await db.salesOrder.count({
+      where: {
+        orderNumber: {
+          startsWith: `${prefix}-${dateStr}-`,
+        },
+      },
+    });
+    count = result;
   }
-  // Add other types as needed
 
   // Generate next number (padded to 4 digits)
   const nextNum = (count + 1).toString().padStart(4, '0');

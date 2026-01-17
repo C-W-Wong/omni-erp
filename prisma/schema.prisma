@@ -37,6 +37,8 @@ model User {
   completedTransfers  InventoryTransfer[] @relation("TransferCompleter")
   createdPOs          PurchaseOrder[]     @relation("POCreator")
   confirmedPOs        PurchaseOrder[]     @relation("POConfirmer")
+  createdSOs          SalesOrder[]        @relation("SOCreator")
+  confirmedSOs        SalesOrder[]        @relation("SOConfirmer")
 
   @@map("users")
 }
@@ -77,6 +79,7 @@ model Product {
   inventory           Inventory[]
   transferItems       InventoryTransferItem[]
   purchaseOrderItems  PurchaseOrderItem[]
+  salesOrderItems     SalesOrderItem[]
 
   @@index([categoryId])
   @@index([sku])
@@ -106,6 +109,8 @@ model Customer {
   isActive        Boolean   @default(true)
   createdAt       DateTime  @default(now())
   updatedAt       DateTime  @updatedAt
+
+  salesOrders     SalesOrder[]
 
   @@index([code])
   @@index([name])
@@ -167,6 +172,7 @@ model Warehouse {
   outgoingTransfers       InventoryTransfer[] @relation("TransferSource")
   incomingTransfers       InventoryTransfer[] @relation("TransferTarget")
   purchaseOrders          PurchaseOrder[]
+  salesOrders             SalesOrder[]
 
   @@index([code])
   @@map("warehouses")
@@ -241,6 +247,7 @@ model Batch {
   landedCostItems     LandedCostItem[]
   inventory           Inventory[]
   transferItems       InventoryTransferItem[]
+  salesAllocations    SalesOrderAllocation[]
 
   @@index([batchNumber])
   @@index([productId])
@@ -461,4 +468,111 @@ model PurchaseOrderItem {
   @@index([purchaseOrderId])
   @@index([productId])
   @@map("purchase_order_items")
+}
+
+// ============================================
+// 銷售模組 (Sales Module)
+// ============================================
+
+enum SalesOrderStatus {
+  DRAFT
+  CONFIRMED       // Order confirmed, inventory allocated
+  PROCESSING      // Being prepared for shipment
+  SHIPPED         // Shipped to customer
+  COMPLETED       // Customer received, fully paid
+  CANCELLED
+}
+
+model SalesOrder {
+  id                String            @id @default(cuid())
+  orderNumber       String            @unique               // SO-YYYYMMDD-XXXX
+  customerId        String
+  customer          Customer          @relation(fields: [customerId], references: [id])
+  warehouseId       String                                  // Shipping warehouse
+  warehouse         Warehouse         @relation(fields: [warehouseId], references: [id])
+
+  status            SalesOrderStatus  @default(DRAFT)
+  orderDate         DateTime          @default(now())
+  expectedShipDate  DateTime?
+  shippedDate       DateTime?
+  shippingAddress   String?
+
+  // Amounts
+  currency          String            @default("USD")
+  subtotal          Decimal           @default(0) @db.Decimal(15, 2)
+  taxRate           Decimal           @default(0) @db.Decimal(5, 4)    // e.g., 0.05 for 5%
+  taxAmount         Decimal           @default(0) @db.Decimal(15, 2)
+  shippingFee       Decimal           @default(0) @db.Decimal(15, 2)
+  totalAmount       Decimal           @default(0) @db.Decimal(15, 2)
+  totalCost         Decimal           @default(0) @db.Decimal(15, 2)   // COGS (Cost of Goods Sold)
+
+  notes             String?
+
+  // User tracking
+  createdById       String?
+  createdBy         User?             @relation("SOCreator", fields: [createdById], references: [id])
+  confirmedAt       DateTime?
+  confirmedById     String?
+  confirmedBy       User?             @relation("SOConfirmer", fields: [confirmedById], references: [id])
+
+  items             SalesOrderItem[]
+
+  createdAt         DateTime          @default(now())
+  updatedAt         DateTime          @updatedAt
+
+  @@index([orderNumber])
+  @@index([customerId])
+  @@index([warehouseId])
+  @@index([status])
+  @@index([orderDate])
+  @@map("sales_orders")
+}
+
+model SalesOrderItem {
+  id                String            @id @default(cuid())
+  salesOrderId      String
+  salesOrder        SalesOrder        @relation(fields: [salesOrderId], references: [id], onDelete: Cascade)
+  productId         String
+  product           Product           @relation(fields: [productId], references: [id])
+
+  quantity          Decimal           @db.Decimal(15, 4)
+  unitPrice         Decimal           @db.Decimal(15, 4)
+  amount            Decimal           @db.Decimal(15, 2)     // quantity × unitPrice
+
+  // Cost tracking (calculated from batch allocations)
+  unitCost          Decimal           @default(0) @db.Decimal(15, 6)
+  costAmount        Decimal           @default(0) @db.Decimal(15, 2)  // COGS for this line
+
+  // Shipping tracking
+  shippedQuantity   Decimal           @default(0) @db.Decimal(15, 4)
+
+  notes             String?
+
+  createdAt         DateTime          @default(now())
+  updatedAt         DateTime          @updatedAt
+
+  allocations       SalesOrderAllocation[]
+
+  @@index([salesOrderId])
+  @@index([productId])
+  @@map("sales_order_items")
+}
+
+// Tracks which batches are allocated to which sales order items
+model SalesOrderAllocation {
+  id                String            @id @default(cuid())
+  salesOrderItemId  String
+  salesOrderItem    SalesOrderItem    @relation(fields: [salesOrderItemId], references: [id], onDelete: Cascade)
+  batchId           String
+  batch             Batch             @relation(fields: [batchId], references: [id])
+
+  quantity          Decimal           @db.Decimal(15, 4)    // Quantity allocated from this batch
+  costPerUnit       Decimal           @db.Decimal(15, 6)    // Cost per unit at time of allocation
+
+  createdAt         DateTime          @default(now())
+
+  @@unique([salesOrderItemId, batchId])
+  @@index([salesOrderItemId])
+  @@index([batchId])
+  @@map("sales_order_allocations")
 }
