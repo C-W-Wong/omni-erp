@@ -10,18 +10,18 @@
     "ui": "shadcn/ui + Tailwind CSS",
     "auth": "NextAuth.js"
   },
-  "lastUpdated": "",
+  "lastUpdated": "2026-01-17",
   "phases": [
     {
       "id": 1,
       "name": "專案初始化",
-      "status": "pending",
+      "status": "in_progress",
       "features": [
         {
           "id": "1.1",
           "name": "專案設置",
           "description": "初始化 Next.js 14 專案，配置 TypeScript、Tailwind、Docker",
-          "status": "pending",
+          "status": "completed",
           "priority": "critical",
           "tasks": [
             "建立 Next.js 14 專案 (App Router)",
@@ -36,7 +36,7 @@
           "id": "1.2",
           "name": "Prisma 設置",
           "description": "配置 Prisma ORM 和資料庫連線",
-          "status": "pending",
+          "status": "completed",
           "priority": "critical",
           "tasks": [
             "安裝 Prisma CLI 和 Client",
@@ -50,7 +50,7 @@
           "id": "1.3",
           "name": "tRPC 設置",
           "description": "配置 tRPC 全棧類型安全 API",
-          "status": "pending",
+          "status": "completed",
           "priority": "critical",
           "tasks": [
             "安裝 @trpc/server, @trpc/client, @trpc/react-query",
@@ -66,7 +66,7 @@
           "id": "1.4",
           "name": "UI 基礎設置",
           "description": "配置 shadcn/ui 和基礎佈局",
-          "status": "pending",
+          "status": "completed",
           "priority": "critical",
           "tasks": [
             "初始化 shadcn/ui (npx shadcn-ui@latest init)",
@@ -80,7 +80,7 @@
           "id": "1.5",
           "name": "認證系統",
           "description": "使用 NextAuth.js 實現認證和角色權限",
-          "status": "pending",
+          "status": "in_progress",
           "priority": "critical",
           "tasks": [
             "安裝 NextAuth.js v5",

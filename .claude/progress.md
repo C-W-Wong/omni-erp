@@ -3,8 +3,8 @@
 ## 當前狀態
 
 - **目前階段**: Phase 1 - 專案初始化
-- **下一個任務**: 1.1 專案設置
-- **最後更新**: -
+- **下一個任務**: 1.5 認證系統 (in progress)
+- **最後更新**: 2026-01-17
 
 ---
 
@@ -14,7 +14,11 @@
 
 | 日期 | Session | 完成功能 | 備註 |
 |------|---------|---------|------|
-| - | - | - | 專案尚未開始 |
+| 2026-01-17 | 1 | 1.1 專案設置 | Next.js 14, TypeScript, Tailwind, Docker, ESLint/Prettier |
+| 2026-01-17 | 1 | 1.2 Prisma 設置 | PostgreSQL 連線, User model with roles |
+| 2026-01-17 | 1 | 1.3 tRPC 設置 | tRPC server/client, React Query integration |
+| 2026-01-17 | 1 | 1.4 UI 基礎設置 | shadcn/ui, Dashboard layout, Sidebar, Header, Dark mode |
+| 2026-01-17 | 1 | 1.5 認證系統 | In progress - NextAuth.js v5, Login page |
 
 ---
 
@@ -22,7 +26,10 @@
 
 | ID | 功能名稱 | 完成日期 | 備註 |
 |----|---------|---------|------|
-| - | - | - | - |
+| 1.1 | 專案設置 | 2026-01-17 | Next.js 14 with App Router |
+| 1.2 | Prisma 設置 | 2026-01-17 | PostgreSQL on Docker port 5433 |
+| 1.3 | tRPC 設置 | 2026-01-17 | Type-safe API layer |
+| 1.4 | UI 基礎設置 | 2026-01-17 | Industrial design theme |
 
 ---
 
@@ -38,7 +45,8 @@
 
 | 模組 | 單元測試 | 整合測試 | 備註 |
 |------|---------|---------|------|
-| - | - | - | - |
+| Auth | - | - | Pending |
+| tRPC | - | - | Pending |
 
 ---
 
@@ -65,3 +73,13 @@
 - `high`: 重要
 - `medium`: 一般
 - `low`: 可延後
+
+### 測試帳號
+
+| 角色 | Email | 密碼 |
+|------|-------|------|
+| Admin | admin@erp.local | admin123 |
+| Sales | sales@erp.local | test123 |
+| Warehouse | warehouse@erp.local | test123 |
+| Purchasing | purchasing@erp.local | test123 |
+| Accounting | accounting@erp.local | test123 |

@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { TRPCProvider } from '@/components/providers/TRPCProvider';
 import { ThemeProvider } from '@/components/providers/ThemeProvider';
+import { SessionProvider } from '@/components/providers/SessionProvider';
 import { Toaster } from '@/components/ui/sonner';
 import './globals.css';
 
@@ -17,17 +18,19 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className="antialiased">
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
-          <TRPCProvider>
-            {children}
-            <Toaster />
-          </TRPCProvider>
-        </ThemeProvider>
+        <SessionProvider>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
+            <TRPCProvider>
+              {children}
+              <Toaster />
+            </TRPCProvider>
+          </ThemeProvider>
+        </SessionProvider>
       </body>
     </html>
   );

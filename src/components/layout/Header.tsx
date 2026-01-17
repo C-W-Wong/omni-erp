@@ -1,6 +1,8 @@
 'use client';
 
 import { useTheme } from 'next-themes';
+import { signOut } from 'next-auth/react';
+import { useAuth } from '@/hooks/use-auth';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
@@ -19,8 +21,33 @@ interface HeaderProps {
   sidebarCollapsed: boolean;
 }
 
+function getInitials(name: string | null | undefined, email: string | undefined): string {
+  if (name) {
+    return name
+      .split(' ')
+      .map((n) => n[0])
+      .join('')
+      .toUpperCase()
+      .slice(0, 2);
+  }
+  if (email) {
+    return email.slice(0, 2).toUpperCase();
+  }
+  return 'U';
+}
+
+function formatRole(role: string | undefined): string {
+  if (!role) return 'User';
+  return role.charAt(0).toUpperCase() + role.slice(1).toLowerCase();
+}
+
 export function Header({ sidebarCollapsed }: HeaderProps) {
   const { theme, setTheme } = useTheme();
+  const { user, isLoading } = useAuth();
+
+  const handleLogout = async () => {
+    await signOut({ callbackUrl: '/login' });
+  };
 
   return (
     <header
@@ -125,21 +152,28 @@ export function Header({ sidebarCollapsed }: HeaderProps) {
           {/* User Menu */}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="h-9 gap-2 px-2">
+              <Button variant="ghost" className="h-9 gap-2 px-2" disabled={isLoading}>
                 <Avatar className="h-7 w-7">
-                  <AvatarImage src="/avatars/user.png" alt="User" />
+                  <AvatarImage src="/avatars/user.png" alt={user?.name || 'User'} />
                   <AvatarFallback className="text-xs font-medium bg-primary text-primary-foreground">
-                    AD
+                    {getInitials(user?.name, user?.email)}
                   </AvatarFallback>
                 </Avatar>
                 <div className="hidden md:flex flex-col items-start">
-                  <span className="text-sm font-medium">Admin User</span>
-                  <span className="text-[10px] text-muted-foreground font-mono">Administrator</span>
+                  <span className="text-sm font-medium">{user?.name || 'Loading...'}</span>
+                  <span className="text-[10px] text-muted-foreground font-mono">
+                    {formatRole(user?.role)}
+                  </span>
                 </div>
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-56">
-              <DropdownMenuLabel>My Account</DropdownMenuLabel>
+              <DropdownMenuLabel>
+                <div className="flex flex-col space-y-1">
+                  <p className="text-sm font-medium">{user?.name}</p>
+                  <p className="text-xs text-muted-foreground">{user?.email}</p>
+                </div>
+              </DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuItem className="cursor-pointer">
                 <User className="mr-2 h-4 w-4" />
@@ -150,7 +184,10 @@ export function Header({ sidebarCollapsed }: HeaderProps) {
                 Settings
               </DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuItem className="cursor-pointer text-destructive focus:text-destructive">
+              <DropdownMenuItem
+                className="cursor-pointer text-destructive focus:text-destructive"
+                onClick={handleLogout}
+              >
                 <LogOut className="mr-2 h-4 w-4" />
                 Log out
               </DropdownMenuItem>
