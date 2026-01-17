@@ -34,3 +34,41 @@ model User {
 
   @@map("users")
 }
+
+// ============================================
+// Product Models
+// ============================================
+
+model ProductCategory {
+  id          String    @id @default(cuid())
+  name        String    @unique
+  description String?
+  parentId    String?
+  parent      ProductCategory?  @relation("CategoryHierarchy", fields: [parentId], references: [id])
+  children    ProductCategory[] @relation("CategoryHierarchy")
+  products    Product[]
+  isActive    Boolean   @default(true)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@map("product_categories")
+}
+
+model Product {
+  id              String          @id @default(cuid())
+  sku             String          @unique
+  name            String
+  description     String?
+  categoryId      String?
+  category        ProductCategory? @relation(fields: [categoryId], references: [id])
+  unit            String          @default("PCS")   // PCS, KG, M, L, etc.
+  defaultPrice    Decimal         @default(0) @db.Decimal(15, 2)
+  minStockLevel   Int             @default(0)       // Low stock alert threshold
+  isActive        Boolean         @default(true)
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+
+  @@index([categoryId])
+  @@index([sku])
+  @@map("products")
+}

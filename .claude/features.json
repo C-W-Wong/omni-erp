@@ -97,13 +97,13 @@
     {
       "id": 2,
       "name": "基礎資料模型",
-      "status": "pending",
+      "status": "in_progress",
       "features": [
         {
           "id": "2.1",
           "name": "產品管理",
           "description": "產品和產品分類的完整 CRUD",
-          "status": "pending",
+          "status": "in_progress",
           "priority": "high",
           "tasks": [
             "建立 Product 和 ProductCategory Prisma 模型",

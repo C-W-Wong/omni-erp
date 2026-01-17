@@ -1,16 +1,12 @@
 import { createTRPCRouter, publicProcedure } from './trpc';
-
-// Import routers as they are created
-// import { productRouter } from './routers/product';
-// import { customerRouter } from './routers/customer';
-// etc.
+import { productRouter } from './routers/product';
 
 export const appRouter = createTRPCRouter({
   health: publicProcedure.query(() => {
     return { status: 'ok', timestamp: new Date().toISOString() };
   }),
+  product: productRouter,
   // Add routers here as they are created:
-  // product: productRouter,
   // customer: customerRouter,
   // supplier: supplierRouter,
   // warehouse: warehouseRouter,

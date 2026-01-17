@@ -1,11 +1,15 @@
-import { initTRPC } from '@trpc/server';
+import { initTRPC, TRPCError } from '@trpc/server';
 import superjson from 'superjson';
 import { ZodError } from 'zod';
-import { prisma } from '../db';
+import { auth } from '@/lib/auth';
+import { db } from '../db';
 
 export const createTRPCContext = async (opts: { headers: Headers }) => {
+  const session = await auth();
+
   return {
-    prisma,
+    db,
+    session,
     ...opts,
   };
 };
@@ -29,14 +33,20 @@ export const createTRPCRouter = t.router;
 
 export const publicProcedure = t.procedure;
 
-// Protected procedure - requires authentication (to be implemented with NextAuth)
+// Protected procedure - requires authentication
 export const protectedProcedure = t.procedure.use(async ({ ctx, next }) => {
-  // TODO: Implement authentication check when NextAuth is set up
-  // For now, allow all requests
+  if (!ctx.session?.user) {
+    throw new TRPCError({ code: 'UNAUTHORIZED', message: 'You must be logged in' });
+  }
+
   return next({
     ctx: {
       ...ctx,
-      // session: ctx.session,
+      session: ctx.session,
+      user: ctx.session.user,
     },
   });
 });
+
+// Re-export router for convenience
+export const router = createTRPCRouter;
