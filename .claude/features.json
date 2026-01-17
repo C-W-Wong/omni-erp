@@ -204,13 +204,13 @@
     {
       "id": 4,
       "name": "庫存管理",
-      "status": "pending",
+      "status": "completed",
       "features": [
         {
           "id": "4.1",
           "name": "庫存資料結構",
           "description": "Product × Batch × Warehouse 三維庫存追蹤",
-          "status": "pending",
+          "status": "completed",
           "priority": "critical",
           "tasks": [
             "建立 Inventory Prisma 模型",
@@ -222,7 +222,7 @@
           "id": "4.2",
           "name": "庫存查詢",
           "description": "多維度庫存查看和低庫存警示",
-          "status": "pending",
+          "status": "completed",
           "priority": "high",
           "tasks": [
             "建立 inventory tRPC router",
@@ -237,7 +237,7 @@
           "id": "4.3",
           "name": "庫存分配演算法",
           "description": "實現 FIFO/LIFO/SPECIFIC/WEIGHTED_AVG",
-          "status": "pending",
+          "status": "completed",
           "priority": "critical",
           "tasks": [
             "建立 inventory.service.ts",
@@ -252,7 +252,7 @@
           "id": "4.4",
           "name": "庫存調撥",
           "description": "倉庫間庫存調撥",
-          "status": "pending",
+          "status": "completed",
           "priority": "medium",
           "tasks": [
             "建立 InventoryTransfer Prisma 模型",
@@ -267,7 +267,7 @@
           "id": "4.5",
           "name": "系統設定",
           "description": "庫存分配方式等系統設定",
-          "status": "pending",
+          "status": "completed",
           "priority": "medium",
           "tasks": [
             "建立 SystemSetting Prisma 模型",

@@ -2,12 +2,13 @@
 
 ## 當前狀態
 
-- **目前階段**: Phase 4 - 庫存管理
-- **下一個任務**: 4.1 庫存資料結構
+- **目前階段**: Phase 5 - 採購模組
+- **下一個任務**: 5.1 採購訂單 CRUD
 - **最後更新**: 2026-01-17
 - **Phase 1 完成**: ✓
 - **Phase 2 完成**: ✓
 - **Phase 3 完成**: ✓
+- **Phase 4 完成**: ✓
 
 ---
 
@@ -28,6 +29,11 @@
 | 2026-01-17 | 3 | 2.4 倉庫管理 | Warehouse model, default warehouse logic |
 | 2026-01-17 | 4 | 3.1 成本項目類型管理 | CostItemType model, seed defaults, CRUD |
 | 2026-01-17 | 4 | 3.2 批次管理 | Batch model, LandedCostItem, cost calculation, confirmation |
+| 2026-01-17 | 5 | 4.1 庫存資料結構 | Inventory model, Product × Batch × Warehouse tracking |
+| 2026-01-17 | 5 | 4.2 庫存查詢 | Inventory list page, statistics, filters, low stock alerts |
+| 2026-01-17 | 5 | 4.3 庫存分配演算法 | FIFO, LIFO, SPECIFIC, WEIGHTED_AVG algorithms |
+| 2026-01-17 | 5 | 4.4 庫存調撥 | Transfer model, workflow, list/detail/create pages |
+| 2026-01-17 | 5 | 4.5 系統設定 | SystemSetting model, settings page, allocation method config |
 
 ---
 
@@ -46,6 +52,11 @@
 | 2.4 | 倉庫管理 | 2026-01-17 | Warehouse CRUD, default warehouse logic |
 | 3.1 | 成本項目類型管理 | 2026-01-17 | CostItemType CRUD, seed defaults, system protection |
 | 3.2 | 批次管理 | 2026-01-17 | Batch CRUD, Landed Cost items, auto-calculation, confirmation |
+| 4.1 | 庫存資料結構 | 2026-01-17 | Inventory model, composite unique index |
+| 4.2 | 庫存查詢 | 2026-01-17 | Inventory tRPC router, list page, statistics, filters |
+| 4.3 | 庫存分配演算法 | 2026-01-17 | FIFO/LIFO/SPECIFIC/WEIGHTED_AVG algorithms |
+| 4.4 | 庫存調撥 | 2026-01-17 | Transfer CRUD, workflow, approval process |
+| 4.5 | 系統設定 | 2026-01-17 | SystemSetting model, settings page, default seed
 
 ---
 
