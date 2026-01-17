@@ -2,9 +2,10 @@
 
 ## 當前狀態
 
-- **目前階段**: Phase 1 - 專案初始化
-- **下一個任務**: 1.5 認證系統 (in progress)
+- **目前階段**: Phase 2 - 基礎資料模型
+- **下一個任務**: 2.1 產品管理
 - **最後更新**: 2026-01-17
+- **Phase 1 完成**: ✓
 
 ---
 
@@ -18,7 +19,7 @@
 | 2026-01-17 | 1 | 1.2 Prisma 設置 | PostgreSQL 連線, User model with roles |
 | 2026-01-17 | 1 | 1.3 tRPC 設置 | tRPC server/client, React Query integration |
 | 2026-01-17 | 1 | 1.4 UI 基礎設置 | shadcn/ui, Dashboard layout, Sidebar, Header, Dark mode |
-| 2026-01-17 | 1 | 1.5 認證系統 | In progress - NextAuth.js v5, Login page |
+| 2026-01-17 | 1 | 1.5 認證系統 | NextAuth.js v5, Login page, Middleware, useAuth hook |
 
 ---
 
@@ -30,6 +31,7 @@
 | 1.2 | Prisma 設置 | 2026-01-17 | PostgreSQL on Docker port 5433 |
 | 1.3 | tRPC 設置 | 2026-01-17 | Type-safe API layer |
 | 1.4 | UI 基礎設置 | 2026-01-17 | Industrial design theme |
+| 1.5 | 認證系統 | 2026-01-17 | NextAuth.js v5, JWT strategy, 5 roles |
 
 ---
 

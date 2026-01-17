@@ -15,7 +15,7 @@
     {
       "id": 1,
       "name": "專案初始化",
-      "status": "in_progress",
+      "status": "completed",
       "features": [
         {
           "id": "1.1",
@@ -80,7 +80,7 @@
           "id": "1.5",
           "name": "認證系統",
           "description": "使用 NextAuth.js 實現認證和角色權限",
-          "status": "in_progress",
+          "status": "completed",
           "priority": "critical",
           "tasks": [
             "安裝 NextAuth.js v5",
