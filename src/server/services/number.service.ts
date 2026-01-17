@@ -40,6 +40,15 @@ export async function generateNumber(type: NumberType): Promise<string> {
       },
     });
     count = result;
+  } else if (type === 'purchase') {
+    const result = await db.purchaseOrder.count({
+      where: {
+        orderNumber: {
+          startsWith: `${prefix}-${dateStr}-`,
+        },
+      },
+    });
+    count = result;
   }
   // Add other types as needed
 
