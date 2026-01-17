@@ -1,0 +1,556 @@
+{
+  "project": "Import Trading ERP",
+  "version": "1.0.0",
+  "techStack": {
+    "framework": "Next.js 14 (App Router)",
+    "language": "TypeScript",
+    "api": "tRPC",
+    "orm": "Prisma",
+    "database": "PostgreSQL",
+    "ui": "shadcn/ui + Tailwind CSS",
+    "auth": "NextAuth.js"
+  },
+  "lastUpdated": "",
+  "phases": [
+    {
+      "id": 1,
+      "name": "專案初始化",
+      "status": "pending",
+      "features": [
+        {
+          "id": "1.1",
+          "name": "專案設置",
+          "description": "初始化 Next.js 14 專案，配置 TypeScript、Tailwind、Docker",
+          "status": "pending",
+          "priority": "critical",
+          "tasks": [
+            "建立 Next.js 14 專案 (App Router)",
+            "配置 TypeScript strict mode",
+            "安裝並配置 Tailwind CSS",
+            "建立 Docker Compose (PostgreSQL + App)",
+            "建立 .env.example 範本",
+            "配置 ESLint + Prettier"
+          ]
+        },
+        {
+          "id": "1.2",
+          "name": "Prisma 設置",
+          "description": "配置 Prisma ORM 和資料庫連線",
+          "status": "pending",
+          "priority": "critical",
+          "tasks": [
+            "安裝 Prisma CLI 和 Client",
+            "初始化 Prisma (prisma init)",
+            "配置 PostgreSQL 連線字串",
+            "建立 db.ts (Prisma Client singleton)",
+            "測試資料庫連線"
+          ]
+        },
+        {
+          "id": "1.3",
+          "name": "tRPC 設置",
+          "description": "配置 tRPC 全棧類型安全 API",
+          "status": "pending",
+          "priority": "critical",
+          "tasks": [
+            "安裝 @trpc/server, @trpc/client, @trpc/react-query",
+            "建立 src/server/trpc/trpc.ts (初始化)",
+            "建立 src/server/trpc/router.ts (根路由)",
+            "建立 src/app/api/trpc/[trpc]/route.ts",
+            "建立 src/lib/trpc.ts (客戶端)",
+            "配置 TRPCProvider",
+            "測試基本 API 調用"
+          ]
+        },
+        {
+          "id": "1.4",
+          "name": "UI 基礎設置",
+          "description": "配置 shadcn/ui 和基礎佈局",
+          "status": "pending",
+          "priority": "critical",
+          "tasks": [
+            "初始化 shadcn/ui (npx shadcn-ui@latest init)",
+            "安裝基礎元件 (Button, Input, Card, Table, Dialog, Form)",
+            "建立 Dashboard 佈局 (側邊欄 + Header)",
+            "建立登入頁面佈局",
+            "配置深色模式支援"
+          ]
+        },
+        {
+          "id": "1.5",
+          "name": "認證系統",
+          "description": "使用 NextAuth.js 實現認證和角色權限",
+          "status": "pending",
+          "priority": "critical",
+          "tasks": [
+            "安裝 NextAuth.js v5",
+            "建立 User 和 Role Prisma 模型",
+            "配置 Credentials Provider",
+            "實現登入/登出功能",
+            "建立 5 種角色 (Admin, Sales, Warehouse, Purchasing, Accounting)",
+            "實現路由保護 middleware",
+            "建立權限檢查 hook"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "name": "基礎資料模型",
+      "status": "pending",
+      "features": [
+        {
+          "id": "2.1",
+          "name": "產品管理",
+          "description": "產品和產品分類的完整 CRUD",
+          "status": "pending",
+          "priority": "high",
+          "tasks": [
+            "建立 Product 和 ProductCategory Prisma 模型",
+            "執行資料庫遷移",
+            "建立 product tRPC router (list, getById, create, update, delete)",
+            "建立 Zod 驗證 schema",
+            "建立產品列表頁面 (含分頁、搜尋、篩選)",
+            "建立產品新增/編輯表單 (React Hook Form)",
+            "建立產品分類管理"
+          ]
+        },
+        {
+          "id": "2.2",
+          "name": "客戶管理",
+          "description": "客戶資料的完整 CRUD",
+          "status": "pending",
+          "priority": "high",
+          "tasks": [
+            "建立 Customer Prisma 模型",
+            "執行資料庫遷移",
+            "建立 customer tRPC router",
+            "建立 Zod 驗證 schema",
+            "建立客戶列表頁面",
+            "建立客戶新增/編輯表單"
+          ]
+        },
+        {
+          "id": "2.3",
+          "name": "供應商管理",
+          "description": "供應商資料的完整 CRUD",
+          "status": "pending",
+          "priority": "high",
+          "tasks": [
+            "建立 Supplier Prisma 模型",
+            "執行資料庫遷移",
+            "建立 supplier tRPC router",
+            "建立 Zod 驗證 schema",
+            "建立供應商列表頁面",
+            "建立供應商新增/編輯表單"
+          ]
+        },
+        {
+          "id": "2.4",
+          "name": "倉庫管理",
+          "description": "多倉庫設定",
+          "status": "pending",
+          "priority": "high",
+          "tasks": [
+            "建立 Warehouse Prisma 模型",
+            "執行資料庫遷移",
+            "建立 warehouse tRPC router",
+            "建立倉庫列表頁面",
+            "建立倉庫新增/編輯表單",
+            "實現預設倉庫邏輯"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Landed Cost 模組",
+      "status": "pending",
+      "features": [
+        {
+          "id": "3.1",
+          "name": "成本項目類型管理",
+          "description": "可配置的成本項目類型（運費、關稅、報關費等）",
+          "status": "pending",
+          "priority": "high",
+          "tasks": [
+            "建立 CostItemType Prisma 模型",
+            "建立 seed 腳本（預設成本項目）",
+            "建立 costItemType tRPC router",
+            "建立成本項目類型管理頁面",
+            "系統項目保護（不可刪除）"
+          ]
+        },
+        {
+          "id": "3.2",
+          "name": "批次管理",
+          "description": "批次建立和 Landed Cost 輸入，自動計算單位成本",
+          "status": "pending",
+          "priority": "critical",
+          "tasks": [
+            "建立 Batch Prisma 模型",
+            "建立 LandedCostItem Prisma 模型",
+            "建立 batch tRPC router",
+            "建立 batch.service.ts (成本計算邏輯)",
+            "建立批次列表頁面",
+            "建立 Landed Cost 輸入介面",
+            "實現自動計算 (totalLandedCost, costPerUnit)",
+            "實現批次成本確認功能",
+            "確認後鎖定成本（不可修改）"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "name": "庫存管理",
+      "status": "pending",
+      "features": [
+        {
+          "id": "4.1",
+          "name": "庫存資料結構",
+          "description": "Product × Batch × Warehouse 三維庫存追蹤",
+          "status": "pending",
+          "priority": "critical",
+          "tasks": [
+            "建立 Inventory Prisma 模型",
+            "建立複合唯一索引 (productId, batchId, warehouseId)",
+            "實現 quantity 和 reservedQuantity 欄位邏輯"
+          ]
+        },
+        {
+          "id": "4.2",
+          "name": "庫存查詢",
+          "description": "多維度庫存查看和低庫存警示",
+          "status": "pending",
+          "priority": "high",
+          "tasks": [
+            "建立 inventory tRPC router",
+            "建立庫存總覽頁面（按產品彙總）",
+            "建立庫存明細頁面（按批次展開）",
+            "建立倉庫庫存檢視",
+            "實現低庫存警示功能",
+            "實現可用數量計算 (quantity - reservedQuantity)"
+          ]
+        },
+        {
+          "id": "4.3",
+          "name": "庫存分配演算法",
+          "description": "實現 FIFO/LIFO/SPECIFIC/WEIGHTED_AVG",
+          "status": "pending",
+          "priority": "critical",
+          "tasks": [
+            "建立 inventory.service.ts",
+            "實現 allocateFIFO 演算法",
+            "實現 allocateLIFO 演算法",
+            "實現 allocateSpecific 演算法",
+            "實現 allocateWeightedAvg 演算法",
+            "建立統一分配入口函數"
+          ]
+        },
+        {
+          "id": "4.4",
+          "name": "庫存調撥",
+          "description": "倉庫間庫存調撥",
+          "status": "pending",
+          "priority": "medium",
+          "tasks": [
+            "建立 InventoryTransfer Prisma 模型",
+            "建立 InventoryTransferItem Prisma 模型",
+            "建立 inventoryTransfer tRPC router",
+            "建立調撥單列表頁面",
+            "建立調撥單建立表單",
+            "實現調撥確認（事務：扣源倉、加目標倉）"
+          ]
+        },
+        {
+          "id": "4.5",
+          "name": "系統設定",
+          "description": "庫存分配方式等系統設定",
+          "status": "pending",
+          "priority": "medium",
+          "tasks": [
+            "建立 SystemSetting Prisma 模型",
+            "建立 seed 腳本（預設設定）",
+            "建立 setting tRPC router",
+            "建立系統設定頁面",
+            "庫存方法選擇 UI"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "name": "採購模組",
+      "status": "pending",
+      "features": [
+        {
+          "id": "5.1",
+          "name": "採購訂單 CRUD",
+          "description": "採購訂單的建立、編輯、查看",
+          "status": "pending",
+          "priority": "critical",
+          "tasks": [
+            "建立 PurchaseOrder Prisma 模型",
+            "建立 PurchaseOrderItem Prisma 模型",
+            "建立 purchaseOrder tRPC router",
+            "建立 Zod 驗證 schema",
+            "建立採購單列表頁面",
+            "建立採購單詳情頁面",
+            "建立採購單新增/編輯表單",
+            "實現訂單號自動產生 (PO-YYYYMMDD-XXXX)",
+            "實現金額自動計算"
+          ]
+        },
+        {
+          "id": "5.2",
+          "name": "到貨處理",
+          "description": "到貨時建立批次、輸入 Landed Cost、入庫、產生會計分錄",
+          "status": "pending",
+          "priority": "critical",
+          "tasks": [
+            "建立 order.service.ts (receivePurchaseOrder)",
+            "建立到貨處理頁面/對話框",
+            "實現事務處理：",
+            "  - 建立批次",
+            "  - 建立 Landed Cost 項目",
+            "  - 計算單位成本",
+            "  - 建立庫存記錄",
+            "  - 更新採購單狀態",
+            "  - 產生會計分錄",
+            "  - 建立應付帳款"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "name": "銷售模組",
+      "status": "pending",
+      "features": [
+        {
+          "id": "6.1",
+          "name": "銷售訂單 CRUD",
+          "description": "銷售訂單的建立、編輯、查看",
+          "status": "pending",
+          "priority": "critical",
+          "tasks": [
+            "建立 SalesOrder Prisma 模型",
+            "建立 SalesOrderItem Prisma 模型",
+            "建立 salesOrder tRPC router",
+            "建立 Zod 驗證 schema",
+            "建立銷售單列表頁面",
+            "建立銷售單詳情頁面",
+            "建立銷售單新增/編輯表單",
+            "實現訂單號自動產生 (SO-YYYYMMDD-XXXX)",
+            "實現金額自動計算"
+          ]
+        },
+        {
+          "id": "6.2",
+          "name": "庫存檢查與即時可用性",
+          "description": "建立訂單時檢查庫存可用性",
+          "status": "pending",
+          "priority": "high",
+          "tasks": [
+            "實現即時庫存可用性查詢",
+            "訂單項目加入時顯示可用數量",
+            "超出可用數量時警示"
+          ]
+        },
+        {
+          "id": "6.3",
+          "name": "訂單確認",
+          "description": "確認時分配批次、預留庫存、產生會計分錄",
+          "status": "pending",
+          "priority": "critical",
+          "tasks": [
+            "建立 order.service.ts (confirmSalesOrder)",
+            "實現事務處理：",
+            "  - 根據系統設定分配批次",
+            "  - 預留庫存 (reservedQuantity)",
+            "  - 記錄批次成本到訂單項目",
+            "  - 產生會計分錄 (AR, Revenue, COGS, Inventory)",
+            "  - 建立應收帳款",
+            "建立確認按鈕和確認對話框"
+          ]
+        },
+        {
+          "id": "6.4",
+          "name": "訂單狀態流程",
+          "description": "Draft → Confirmed → Processing → Shipped → Completed",
+          "status": "pending",
+          "priority": "high",
+          "tasks": [
+            "實現狀態機邏輯",
+            "建立出貨處理 (釋放預留、扣減庫存)",
+            "建立訂單完成處理",
+            "建立訂單取消處理 (恢復庫存)",
+            "狀態變更 UI (按鈕/下拉選單)"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "name": "會計模組",
+      "status": "pending",
+      "features": [
+        {
+          "id": "7.1",
+          "name": "會計科目表",
+          "description": "階層式會計科目架構和預設科目",
+          "status": "pending",
+          "priority": "high",
+          "tasks": [
+            "建立 AccountCategory Prisma 模型",
+            "建立 ChartOfAccount Prisma 模型",
+            "建立 seed 腳本（預設會計科目）",
+            "建立 chartOfAccount tRPC router",
+            "建立科目表管理頁面（樹狀結構）",
+            "科目新增/編輯功能"
+          ]
+        },
+        {
+          "id": "7.2",
+          "name": "會計傳票",
+          "description": "傳票管理，借貸平衡驗證",
+          "status": "pending",
+          "priority": "high",
+          "tasks": [
+            "建立 JournalEntry Prisma 模型",
+            "建立 JournalEntryLine Prisma 模型",
+            "建立 journalEntry tRPC router",
+            "建立 accounting.service.ts",
+            "實現借貸平衡驗證",
+            "實現傳票編號自動產生 (JE-YYYYMM-XXXXX)",
+            "建立傳票列表頁面",
+            "建立傳票詳情頁面",
+            "建立手動傳票建立功能"
+          ]
+        },
+        {
+          "id": "7.3",
+          "name": "自動會計分錄",
+          "description": "銷售和採購自動產生對應的會計分錄",
+          "status": "pending",
+          "priority": "critical",
+          "tasks": [
+            "實現 createSalesJournalEntry (AR/Revenue/COGS/Inventory)",
+            "實現 createPurchaseJournalEntry (Inventory/AP)",
+            "實現 createReceiptJournalEntry (Cash/AR)",
+            "實現 createPaymentJournalEntry (AP/Cash)",
+            "整合到訂單流程中"
+          ]
+        },
+        {
+          "id": "7.4",
+          "name": "應收帳款",
+          "description": "應收帳款追蹤和帳齡分析",
+          "status": "pending",
+          "priority": "medium",
+          "tasks": [
+            "建立 AccountReceivable Prisma 模型",
+            "建立 accountReceivable tRPC router",
+            "銷售確認時自動建立應收",
+            "建立應收帳款列表頁面",
+            "建立收款沖銷功能",
+            "實現帳齡分析 (current/30/60/90/120+)"
+          ]
+        },
+        {
+          "id": "7.5",
+          "name": "應付帳款",
+          "description": "應付帳款追蹤和付款管理",
+          "status": "pending",
+          "priority": "medium",
+          "tasks": [
+            "建立 AccountPayable Prisma 模型",
+            "建立 accountPayable tRPC router",
+            "採購到貨時自動建立應付",
+            "建立應付帳款列表頁面",
+            "建立付款沖銷功能",
+            "到期日提醒功能"
+          ]
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "name": "報表與儀表板",
+      "status": "pending",
+      "features": [
+        {
+          "id": "8.1",
+          "name": "管理儀表板",
+          "description": "首頁儀表板，關鍵指標一覽",
+          "status": "pending",
+          "priority": "medium",
+          "tasks": [
+            "設計儀表板佈局",
+            "今日/本月訂單統計卡片",
+            "待處理訂單列表",
+            "低庫存警示元件",
+            "應收/應付摘要",
+            "近期批次成本趨勢圖 (Recharts)"
+          ]
+        },
+        {
+          "id": "8.2",
+          "name": "庫存報表",
+          "description": "庫存價值、週轉率、批次成本分析",
+          "status": "pending",
+          "priority": "medium",
+          "tasks": [
+            "建立 report tRPC router",
+            "庫存價值報表（按倉庫/產品）",
+            "庫存週轉率報表",
+            "批次成本分析報表",
+            "報表匯出 (Excel)"
+          ]
+        },
+        {
+          "id": "8.3",
+          "name": "銷售報表",
+          "description": "銷售統計、排行榜、毛利分析",
+          "status": "pending",
+          "priority": "medium",
+          "tasks": [
+            "銷售統計報表（日/週/月）",
+            "客戶銷售排行",
+            "產品銷售排行",
+            "毛利分析報表",
+            "報表匯出 (Excel)"
+          ]
+        },
+        {
+          "id": "8.4",
+          "name": "會計報表",
+          "description": "試算表、損益表、資產負債表",
+          "status": "pending",
+          "priority": "medium",
+          "tasks": [
+            "試算表（Trial Balance）",
+            "損益表（Income Statement）",
+            "資產負債表（Balance Sheet）",
+            "科目餘額查詢",
+            "報表匯出 (Excel/PDF)"
+          ]
+        }
+      ]
+    }
+  ],
+  "systemSettings": {
+    "inventoryMethods": ["FIFO", "LIFO", "SPECIFIC", "WEIGHTED_AVG"],
+    "defaultInventoryMethod": "FIFO",
+    "defaultCurrency": "USD",
+    "allowNegativeInventory": false,
+    "orderNumberFormats": {
+      "sales": "SO-YYYYMMDD-XXXX",
+      "purchase": "PO-YYYYMMDD-XXXX",
+      "transfer": "TR-YYYYMMDD-XXXX",
+      "batch": "BTH-YYYYMMDD-XXXX",
+      "journal": "JE-YYYYMM-XXXXX"
+    }
+  }
+}
